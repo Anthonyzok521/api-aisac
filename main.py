@@ -8,6 +8,7 @@ import google.generativeai as genai
 import google.api_core.exceptions
 # Added BackgroundTasks
 from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Form, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from io import BytesIO
@@ -70,6 +71,20 @@ app = FastAPI(
     title="AISAC Document Analyzer API",
     description="Uses Gemini for analysis, supports dynamic training document loading.",
     version="1.3.0"  # Incremented version
+)
+
+origins = [
+    "https://aisac.acteam.dev",
+    "http://localhost",  # Si pruebas localmente sin Next.js
+    "http://localhost:3000",  # Puerto común para Next.js dev
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # --- Pydantic Models ---
